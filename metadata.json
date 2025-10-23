@@ -1,0 +1,5 @@
+{
+  "name": "GRC SaaS Landing Page",
+  "description": "A clean, modern static landing page featuring a Supabase magic-link login panel and a Stripe checkout panel. Designed for easy integration with backend services.",
+  "requestFramePermissions": []
+}
