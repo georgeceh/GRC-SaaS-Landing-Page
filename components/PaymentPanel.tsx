@@ -112,6 +112,15 @@ const PaymentPanel: React.FC = () => {
         )
     }
 
+    const features = [
+        "Full access to course materials",
+        "Comprehensive GRC curriculum",
+        "Hands-on AI integration projects",
+        "Interactive lessons, quizzes & real-world scenarios",
+        "covers enterprise risk (COSO, ISO 31000), cybersecurity (NIST, ISO 27001), IT governance (COBIT, ITIL), and key regulations (GDPR, SOX, PCI DSS) for an integrated program.",
+        "Official Certificate of Completion"
+    ];
+
     return (
         <Card className="bg-slate-900">
             <div className="p-8">
@@ -120,25 +129,16 @@ const PaymentPanel: React.FC = () => {
 
                 <div className="my-6 text-slate-300">
                     <p className="font-semibold text-slate-400 mb-4">Here's what you'll get:</p>
-                    <ul className="space-y-3">
-                        <li className="flex items-center">
-                            <CheckIcon className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                            <span>Comprehensive GRC curriculum</span>
-                        </li>
-                        <li className="flex items-center">
-                            <CheckIcon className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                            <span>Hands-on AI integration projects</span>
-                        </li>
-                        <li className="flex items-center">
-                            <CheckIcon className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                            <span>Full access to course materials</span>
-                        </li>
-                        <li className="flex items-center">
-                            <CheckIcon className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                            <span>Official Certificate of Completion</span>
-                        </li>
+                    <ul className="space-y-3 text-sm">
+                        {features.map((feature, index) => (
+                            <li key={index} className="flex items-start">
+                                <CheckIcon className="h-5 w-5 mr-3 mt-0.5 text-green-500 flex-shrink-0" />
+                                <span>{feature}</span>
+                            </li>
+                        ))}
                     </ul>
                 </div>
+
                 {renderContent()}
             </div>
         </Card>

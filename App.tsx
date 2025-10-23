@@ -72,7 +72,7 @@ function App() {
     <div className="min-h-screen bg-[#0f172a] text-slate-200 flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-4xl mx-auto">
         <header className="text-center mb-10">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-white">
+          <h1 className="text-4xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-slate-200 to-slate-400">
             Governance, Risk, and Compliance (GRC)
           </h1>
           <p className="mt-4 text-lg text-slate-400">
