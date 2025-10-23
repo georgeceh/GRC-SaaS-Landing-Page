@@ -4,10 +4,14 @@ import PaymentPanel from './components/PaymentPanel';
 import Card from './components/ui/Card';
 import { LoadingSpinner } from './components/icons/LoadingSpinner';
 
-// Safely get the API base URL from environment variables injected into the window object.
+// Safely get all required environment variables and the global Supabase object from the window object.
 declare global {
   interface Window {
     ENV_API_BASE?: string;
+    // Added Supabase declarations for the new listener logic
+    supabase?: any; 
+    ENV_SUPABASE_URL?: string;
+    ENV_SUPABASE_ANON_KEY?: string;
   }
 }
 const API_BASE = window.ENV_API_BASE || "";
@@ -18,6 +22,7 @@ function App() {
   const [checkoutStatus, setCheckoutStatus] = useState<CheckoutStatus>('idle');
   const [checkoutMessage, setCheckoutMessage] = useState('');
 
+  // 1. Existing useEffect for post-checkout validation (Stripe redirect)
   useEffect(() => {
     const handlePostCheckout = async () => {
       const u = new URL(window.location.href);
@@ -47,6 +52,39 @@ function App() {
     handlePostCheckout();
   }, []);
   
+  // 2. NEW useEffect for Supabase Login Redirection (Magic Link click)
+  useEffect(() => {
+    const courseDashboardUrl = 'https://dashboard.render.com/static/srv-d3r1cfm3jp1c738v12qg';
+    
+    // Check if the Supabase client is loaded globally
+    if (window.supabase) {
+      const SUPABASE_URL = window.ENV_SUPABASE_URL;
+      const SUPABASE_ANON_KEY = window.ENV_SUPABASE_ANON_KEY;
+      const { createClient } = window.supabase;
+
+      // Initialize client only if environment variables are available
+      if (createClient && SUPABASE_URL && SUPABASE_ANON_KEY) {
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Listen for authentication state changes (this triggers when user clicks magic link)
+        const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(
+          (event, session) => {
+            // Check for a successful session and the signed-in event
+            if (session && event === 'SIGNED_IN') {
+              // Redirect to the GRC Course Static Site
+              window.location.href = courseDashboardUrl;
+            }
+          }
+        );
+        
+        // Clean up the subscription when the component unmounts
+        return () => {
+          subscription?.unsubscribe();
+        };
+      }
+    }
+  }, []); // Run only once on mount
+
   const renderContent = () => {
     if (checkoutStatus !== 'idle') {
       return (
